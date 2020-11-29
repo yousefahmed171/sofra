@@ -19,7 +19,7 @@ class CreateOrdersTable extends Migration {
 			$table->decimal('delivery_cost', 8,2);
 			$table->decimal('total_cost', 8,2);
 			$table->decimal('commission', 8,2);
-			$table->integer('user_id')->unsigned();
+			$table->integer('client_id')->unsigned();
 			$table->integer('restaurant_id')->unsigned();
 		});
 	}

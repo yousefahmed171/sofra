@@ -23,7 +23,7 @@ class Restaurant extends Model
 
     public function reviews()
     {
-        return $this->belongsToMany('App\User', 'user_id');
+        return $this->belongsToMany('App\Models\Client', 'client_id');
     }
 
     public function offers()

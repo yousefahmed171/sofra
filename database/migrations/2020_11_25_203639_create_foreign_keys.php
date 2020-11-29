@@ -26,12 +26,12 @@ class CreateForeignKeys extends Migration {
 						->onUpdate('cascade');
 		});
 		Schema::table('reviews', function(Blueprint $table) {
-			$table->foreign('user_id')->references('id')->on('users')
+			$table->foreign('client_id')->references('id')->on('clients')
 						->onDelete('cascade')
 						->onUpdate('cascade');
 		});
 		Schema::table('orders', function(Blueprint $table) {
-			$table->foreign('user_id')->references('id')->on('users')
+			$table->foreign('client_id')->references('id')->on('clients')
 						->onDelete('cascade')
 						->onUpdate('cascade');
 		});
@@ -55,7 +55,7 @@ class CreateForeignKeys extends Migration {
 						->onDelete('no action')
 						->onUpdate('no action');
 		});
-		Schema::table('users', function(Blueprint $table) {
+		Schema::table('clients', function(Blueprint $table) {
 			$table->foreign('region_id')->references('id')->on('regions')
 						->onDelete('cascade')
 						->onUpdate('cascade');
@@ -99,10 +99,10 @@ class CreateForeignKeys extends Migration {
 			$table->dropForeign('reviews_restaurant_id_foreign');
 		});
 		Schema::table('reviews', function(Blueprint $table) {
-			$table->dropForeign('reviews_user_id_foreign');
+			$table->dropForeign('reviews_client_id_foreign');
 		});
 		Schema::table('orders', function(Blueprint $table) {
-			$table->dropForeign('orders_user_id_foreign');
+			$table->dropForeign('orders_client_id_foreign');
 		});
 		Schema::table('orders', function(Blueprint $table) {
 			$table->dropForeign('orders_restaurant_id_foreign');
@@ -116,8 +116,8 @@ class CreateForeignKeys extends Migration {
 		Schema::table('regions', function(Blueprint $table) {
 			$table->dropForeign('regions_city_id_foreign');
 		});
-		Schema::table('users', function(Blueprint $table) {
-			$table->dropForeign('users_region_id_foreign');
+		Schema::table('clients', function(Blueprint $table) {
+			$table->dropForeign('clients_region_id_foreign');
 		});
 		Schema::table('category_restaurant', function(Blueprint $table) {
 			$table->dropForeign('category_restaurant_category_id_foreign');

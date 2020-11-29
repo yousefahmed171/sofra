@@ -9,7 +9,7 @@ class Order extends Model
 
     protected $table = 'orders';
     public $timestamps = true;
-    protected $fillable = array('address', 'notes', 'payment_method', 'status', 'price', 'delivery_cost', 'total_cost', 'commission', 'restaurant_id');
+    protected $fillable = array('address', 'notes', 'payment_method', 'status', 'price', 'delivery_cost', 'total_cost', 'commission', 'restaurant_id', 'client_id');
 
     public function notifications()
     {
@@ -23,7 +23,7 @@ class Order extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\Client');
     }
 
     public function products()
