@@ -11,7 +11,7 @@ class Restaurant extends Model
     public $timestamps = true;
     protected $fillable = array('name', 'email', 'password', 'phone', 'whatsapp', 'image', 'status', 'minimum_order', 'delivery_cost', 'activated', 'pin_code', 'api_token', 'region_id');
 
-    public function foods()
+    public function products()
     {
         return $this->hasMany('App\Models\Product');
     }
@@ -23,7 +23,7 @@ class Restaurant extends Model
 
     public function reviews()
     {
-        return $this->belongsToMany('App\Models\User', 'user_id');
+        return $this->belongsToMany('App\User', 'user_id');
     }
 
     public function offers()
@@ -55,5 +55,9 @@ class Restaurant extends Model
     {
         return $this->hasMany('App\Models\Payment');
     }
+
+    protected $hidden = [
+        'password', 'remember_token', 'api_token', 'pin_code' 
+    ];
 
 }
