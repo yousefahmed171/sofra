@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+    
 
-class Restaurant extends Model 
+class Restaurant extends Authenticatable 
 {
 
+    use Notifiable;
+    
     protected $table = 'restaurants';
     public $timestamps = true;
     protected $fillable = array('name', 'email', 'password', 'phone', 'whatsapp', 'image', 'status', 'minimum_order', 'delivery_cost', 'activated', 'pin_code', 'api_token', 'region_id');

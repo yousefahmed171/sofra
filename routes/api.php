@@ -19,10 +19,12 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-Route::group(['prefix' => 'v1'], function(){
+Route::group(['prefix' => 'v1', 'namespace' => 'Api'], function(){
+
+
 
     // Route Client
-    Route::group(['prefix' => 'client'], function(){
+    Route::group(['prefix' => 'client', 'namespace' => 'Client'], function(){
 
         // Main Controller
 
@@ -36,10 +38,17 @@ Route::group(['prefix' => 'v1'], function(){
     });
 
 
-    // Route Client
-    Route::group(['prefix' => 'restaurant'], function(){
+    // Route Restaurant
+    Route::group(['prefix' => 'restaurant', 'namespace' => 'Restaurant'], function(){
+
+        // Main Controller
+        Route::get('categories', 'MainController@categories');
+
 
         // Auth Controller
+        Route::post('register', 'AuthController@register');
+        Route::post('login', 'AuthController@login');
+        Route::get('get-restaurants', 'AuthController@getRestaurants');
 
         // Should Login in
         Route::group(['middleware' => 'auth:restaurant'], function(){
@@ -49,8 +58,15 @@ Route::group(['prefix' => 'v1'], function(){
         });
 
     });
-    
+
 
 });
 
 
+// Route::group(['prefix' => 'v1' , 'namespace' => 'Api'],  function () {
+
+//     //AuthController
+//     Route::get('categories', 'AuthController@categories');
+
+
+// });
