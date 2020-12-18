@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use App\Models\Category;
 use App\Models\Restaurant;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -20,8 +21,6 @@ class AuthController extends Controller
         return responseJson(1, 'success', $getRestaurants);
 
     }
-
-
 
     // Register Restaurant
     public function register(Request $request){
@@ -103,12 +102,19 @@ class AuthController extends Controller
     // Login
     public function login(Request $request)
     {
-        $validatorData  = validator()->make($request->all(),
-        [
-            'email'         => 'required|email',
-            'password'      => 'required|confirmed',
-        ]);
-        
+        // Validator Data
+        $rules = [
+            'email'         => 'required',
+            'password'      => 'required',
+        ];
+
+        $messages = [
+            'email.required'         => 'يجب إدخال البريد الإلكتروني',
+            'password.required'      => 'يجب إدخال كلمة السر',
+        ];
+
+        $validatorData  = validator()->make($request->all(), $rules, $messages);
+
         if($validatorData->fails())
         {
             $errors = $validatorData->errors();
@@ -134,7 +140,79 @@ class AuthController extends Controller
         {
             return responseJson(0, 'بيانات الدخول غير صحيحة '); 
         }
-    }   
+    }
+
+    //Profile
+    public function profile(Request $request)
+    {
+
+        $restaurant =  $request->user()->id;
+
+        $rules = [
+            'name'                  => Rule::requiredIf($request->has('name')),
+            'email'                 => Rule::requiredIf($request->has('email'))         . '|email|unique:restaurants,email,'.$restaurant,
+            'phone'                 => Rule::requiredIf($request->has('phone'))         . '|numeric|unique:restaurants,phone,'.$restaurant,
+            'whatsapp'              => Rule::requiredIf($request->has('whatsapp'))      . '|numeric',
+            'password'              => Rule::requiredIf($request->has('password'))      . '|confirmed',
+            'image'                 => Rule::requiredIf($request->has('image'))         . '|image:jpeg,png,jpg,gif,svg|max:2048',
+            'status'                => Rule::requiredIf($request->has('status')),
+            'minimum_order'         => Rule::requiredIf($request->has('minimum_order')) . '|numeric',
+            'delivery_cost'         => Rule::requiredIf($request->has('delivery_cost')) . '|numeric',
+            'region_id'             => Rule::requiredIf($request->has('region_id'))     . '|exists:regions,id', // 'exists' = if user entered date and did not select option
+            'categories'            => Rule::requiredIf($request->has('categories'))    . '|array|exists:categories,id'
+
+        ];
+
+        $messages = [
+
+        ];
+
+
+        $validatorData = validator()->make($request->all(), $rules, $messages);
+
+        if($validatorData->fails())
+        {
+            $errors = $validatorData->errors();
+            return responseJson(0, $validatorData->errors()->first(), $errors);
+        }
+
+        $request->merge([]);
+
+        
+        $request->user()->update($request->all());
+        
+
+        if($request->has('categories'))
+        {
+            $request->user()->categories()->sync($request->categories);
+        }
+
+        if($request->has('password'))
+        {
+            $request->user()->password = bcrypt($request->password);
+        }
+
+        if($request->has('image'))
+        {
+            $image = $request->file('image'); // get image request
+            $extension = $image->getClientOriginalExtension(); // get extension image
+            $name = time() . '.' . $extension; // name image time and extension
+            $destinationPath = public_path('/images/restaurants/'); // path save images
+            $image->move($destinationPath, $name);  // save path and name
+            $request->user()->update(['image' => 'images/restaurants/' . $name]); //update
+        }
+        
+        
+        $request->user()->save();
+
+        $data = [
+            'restaurant' => $request->user()->load('region','categories')
+        ];
+
+        return responseJson(1 , 'تم التعديل بنجاح' , $data);
+
+
+    }
 
 
 }

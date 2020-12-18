@@ -22,6 +22,11 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'v1', 'namespace' => 'Api'], function(){
 
 
+    // Main Controller 
+    Route::get('categories', 'MainController@categories');
+    Route::get('cities', 'MainController@cities');
+    Route::get('regions', 'MainController@regions');
+
 
     // Route Client
     Route::group(['prefix' => 'client', 'namespace' => 'Client'], function(){
@@ -42,7 +47,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api'], function(){
     Route::group(['prefix' => 'restaurant', 'namespace' => 'Restaurant'], function(){
 
         // Main Controller
-        Route::get('categories', 'MainController@categories');
 
 
         // Auth Controller
@@ -54,6 +58,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api'], function(){
         Route::group(['middleware' => 'auth:restaurant'], function(){
 
             // Main Controller
+            Route::post('profile', 'AuthController@profile');
 
         });
 
@@ -61,12 +66,3 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api'], function(){
 
 
 });
-
-
-// Route::group(['prefix' => 'v1' , 'namespace' => 'Api'],  function () {
-
-//     //AuthController
-//     Route::get('categories', 'AuthController@categories');
-
-
-// });

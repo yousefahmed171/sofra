@@ -10,9 +10,5 @@ class MainController extends Controller
 {
     //
 
-    public function categories()
-    {
-        $get = Category::all();
-        return responseJson(1, 'success', $get);
-    }
+
 }
