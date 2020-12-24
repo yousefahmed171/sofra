@@ -13,7 +13,7 @@ class CreateReviewsTable extends Migration {
 			$table->increments('id');
 			$table->timestamps();
 			$table->enum('rate', array('1', '2', '3', '4', '5'));
-			$table->string('comment')->nullable();
+			$table->text('comment')->nullable();
 			$table->integer('restaurant_id')->unsigned();
 			$table->integer('client_id')->unsigned();
 		});

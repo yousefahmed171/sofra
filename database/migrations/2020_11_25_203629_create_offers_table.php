@@ -15,8 +15,8 @@ class CreateOffersTable extends Migration {
 			$table->string('description');
 			$table->decimal('price', 8,2);
 			$table->string('image');
-			$table->date('start_date');
-			$table->date('end_date');
+			$table->dateTime('start_date');
+			$table->dateTime('end_date');
 			$table->integer('restaurant_id')->unsigned();
 		});
 	}

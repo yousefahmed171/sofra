@@ -9,7 +9,7 @@ class Order extends Model
 
     protected $table = 'orders';
     public $timestamps = true;
-    protected $fillable = array('address', 'notes', 'payment_method', 'status', 'price', 'delivery_cost', 'total_cost', 'commission', 'restaurant_id', 'client_id');
+    protected $fillable = array('address', 'notes', 'payment_method', 'status', 'price', 'delivery_cost', 'total_cost', 'commission', 'restaurant_id', 'client_id', 'cost', 'net');
 
     public function notifications()
     {
@@ -28,7 +28,7 @@ class Order extends Model
 
     public function products()
     {
-        return $this->belongsToMany('App\Models\Product'); //quantity, price, special_order;
+        return $this->belongsToMany('App\Models\Product')->withPivot('quantity', 'price', 'note'); 
     }
 
 }

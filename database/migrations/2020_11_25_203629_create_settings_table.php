@@ -14,16 +14,17 @@ class CreateSettingsTable extends Migration {
 			$table->timestamps();
 			$table->string('about');
 			$table->string('phone');
-			$table->string('facebook_link');
-			$table->string('instagram_link');
-			$table->string('twitter_link');
-			$table->string('youtube_link');
-			$table->string('whatsapp_link');
-			$table->string('android_link');
-			$table->string('ios_link');
+			$table->string('facebook_link')->nullable();
+			$table->string('instagram_link')->nullable();
+			$table->string('twitter_link')->nullable();
+			$table->string('youtube_link')->nullable();
+			$table->string('whatsapp_link')->nullable();
+			$table->string('android_link')->nullable();
+			$table->string('ios_link')->nullable();
 			$table->string('terms')->nullable();
 			$table->string('about_commission');
-			$table->string('id_bank');
+			$table->string('id_bank')->nullable();
+			$table->decimal('commission', 8,2);
 		});
 	}
 

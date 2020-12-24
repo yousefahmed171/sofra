@@ -13,7 +13,7 @@ class CreateOrderProductTable extends Migration {
 			$table->timestamps();
 			$table->integer('quantity');
 			$table->decimal('price');
-			$table->text('special_order')->nullable();
+			$table->text('note')->nullable();
 			$table->integer('order_id')->unsigned();
 			$table->integer('product_id')->unsigned();
 		});

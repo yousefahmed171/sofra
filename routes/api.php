@@ -34,10 +34,26 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api'], function(){
         // Main Controller
 
         // Auth Controller
+        Route::post('register', 'AuthController@register');
+        Route::post('login', 'AuthController@login');
+        Route::post('reset-password', 'AuthController@resetPassword');
+        Route::post('new-password', 'AuthController@newPassword');
+        Route::post('register-token', 'AuthController@registerToken');
+        Route::post('remove-token', 'AuthController@removeToken');
+        Route::get('get-clients', 'AuthController@getClients');
 
         // Should Login in
         Route::group(['middleware' => 'auth:client'], function(){
-            // auth
+
+            // Auth Controller
+            Route::post('profile', 'AuthController@profile');
+
+            // Main Controller
+            Route::post('new-order', 'MainController@newOrder');
+            Route::post('decline-order', 'MainController@declineOrder');
+
+            
+
         });
 
     });
@@ -52,13 +68,23 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api'], function(){
         // Auth Controller
         Route::post('register', 'AuthController@register');
         Route::post('login', 'AuthController@login');
+        Route::post('reset-password', 'AuthController@resetPassword');
+        Route::post('new-password', 'AuthController@newPassword');
+        Route::post('register-token', 'AuthController@registerToken');
+        Route::post('remove-token', 'AuthController@removeToken');
         Route::get('get-restaurants', 'AuthController@getRestaurants');
 
         // Should Login in
         Route::group(['middleware' => 'auth:restaurant'], function(){
 
-            // Main Controller
+            // Auth Controller
             Route::post('profile', 'AuthController@profile');
+
+
+
+            // Main Controller
+            Route::post('products', 'MainController@products');
+            Route::post('offers', 'MainController@offers');
 
         });
 
