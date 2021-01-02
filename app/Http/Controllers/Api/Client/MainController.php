@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Client;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Restaurant;
+use App\Models\Contacte;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MainController extends Controller
 {
@@ -150,11 +153,26 @@ class MainController extends Controller
         }
     }
 
+    // orders  client
 
-    // Dcline Order
-
-    public function declineOrder(Request $request)
+    public function orders(Request $request)
     {
+        dd($request->user()->id);
+        $order =  DB::table('orders')->where('client_id', '=', $request->user()->id)
+                                    //->where('status', '=', 'delivered')
+                                    ->paginate(10);
+        return responseJson(1, 'success', $order);
+
+    }
+
+
+    // deliver Order
+
+    public function deliverOrder(Request $request)
+    {
+
+        $client = $request->user();
+
         $rules = [
             'order_id'  => 'required|exists:orders,id'
         ];
@@ -164,14 +182,16 @@ class MainController extends Controller
             'order_id.exists'   => 'الطلب غير موجود'
         ];
 
-        $validator = validator()->make($request->all() , $rules , $messages);
 
-        if($validator->fails())
+        $validatorData = validator()->make($request->all(), $rules, $messages);
+
+        if($validatorData->fails())
         {
-            return responceJson( 0 , $validator->errors()->first() , $validator->errors());
+            $errors = $validatorData->errors();
+            return responseJson(0, $validatorData->errors()->first(), $errors);
         }
 
-        //Get the Order and make sure that it belongs to that client
+        // check if order with user
         $order = Order::where([
                     ['id' , $request->order_id] , 
                     ['client_id' , $request->user()->id]
@@ -179,32 +199,188 @@ class MainController extends Controller
 
         if(!$order)
         {
-            return responceJson(0 , 'هذا الطلب لا يتبع للعميل');
-        }
-        //Make sure that the state of order was pending or accepted
-        if(!($order->state == 'pending' || $order->state == 'accepted'))
-        {
-            return responceJson(0 , 'لا يمكن رفض هذا الطلب' );
+            return responseJson(0 , 'هذا الطلب لا يتبع للعميل');
         }
 
-        //Decline the order
-        $order->state = 'declined';
+        // check if order pending or  accepted   
+        if(!($order->status === 'pending' || $order->status === 'accepted'))
+        {
+            return responseJson(0 , 'لايمكن توصيل هذا الطلب للعميل ' );
+        }
+
+        // Decline the order
+        $order->status = 'delivered';
         $order->save();
-        //Make a notification 
-        $notification = $order->restaurant->notifications()->create([
-                            'title' => 'تم رفض الطلب من العميل' , 
-                            'body'  => '  تم رفض الطلب من العميل   ' . $order->client->name ,
+
+        // Make a notification 
+        $order->restaurant->notifications()->create([
+                            'title' => 'تم توصيل الطلب بنجاح' , 
+                            'content'  => '  تم توصيل الطلب بنجاح   ' . $client->name,
                             'order_id' => $order->id
                         ]);
-        //Send a notification
+
+        // Send Notification
         $tokens = $order->restaurant->tokens()->where('token' , '!=' , '')->pluck('token')->toArray();
         $data = [
             'user_type' => 'restaurant' , 
             'action'    => 'decline_order' , 
             'order'     =>  $order
         ];
-        $send = notifyByFirebase($notification->title , $notification->body , $tokens , $data );
-        return responceJson(1 , 'تم رفض الطلب' , $data);
+       // $send = notifyByFirebase($notification->title , $notification->body , $tokens , $data );
+        return responseJson(1 , 'تم توصيل الطلب بنجاح' , $data);
 
     }
+
+
+    // Dcline Order
+
+    public function declineOrder(Request $request)
+    {
+
+        $client = $request->user();
+
+        $rules = [
+            'order_id'  => 'required|exists:orders,id'
+        ];
+
+        $messages = [
+            'order_id.required' => 'يجب إدخال الطلب' , 
+            'order_id.exists'   => 'الطلب غير موجود'
+        ];
+
+
+        $validatorData = validator()->make($request->all(), $rules, $messages);
+
+        if($validatorData->fails())
+        {
+            $errors = $validatorData->errors();
+            return responseJson(0, $validatorData->errors()->first(), $errors);
+        }
+
+        // check if order with user
+        $order = Order::where([
+                    ['id' , $request->order_id] , 
+                    ['client_id' , $request->user()->id]
+                ])->first();
+
+        if(!$order)
+        {
+            return responseJson(0 , 'هذا الطلب لا يتبع للعميل');
+        }
+
+        // check if order pending or  accepted   
+        if(!($order->status === 'pending' || $order->status === 'accepted'))
+        {
+            return responseJson(0 , 'لايمكن رفض هذا الطلب الان ' );
+        }
+
+        // Decline the order
+        $order->status = 'declined';
+        $order->save();
+
+        // Make a notification 
+        $order->restaurant->notifications()->create([
+                            'title' => 'تم رفض الطلب من قبل  العميل' , 
+                            'content'  => '  تم رفض الطلب من قبل العميل   ' . $client->name,
+                            'order_id' => $order->id
+                        ]);
+
+        // Send Notification
+        $tokens = $order->restaurant->tokens()->where('token' , '!=' , '')->pluck('token')->toArray();
+        $data = [
+            'user_type' => 'restaurant' , 
+            'action'    => 'decline_order' , 
+            'order'     =>  $order
+        ];
+        // $send = notifyByFirebase($notification->title , $notification->body , $tokens , $data );
+        return responseJson(1 , 'تم رفض الطلب' , $data);
+
+    }
+
+    // review
+
+    public function review(Request $request)
+    {
+
+        $rules = [
+            'restaurant_id'     => 'required|exists:restaurants,id',
+            'comment'           => 'required',
+            'rate'              => 'required|numeric|max:5',
+        ];
+
+        $messages = [
+            'restaurant_id.required'    => 'يجب إدخال معرف المطعم' , 
+            'restaurant_id.exists'      => 'المعرف غير موجود',
+            'comment.required'          => 'يجب كتابة تعليق',
+            'rate.required'             => 'يجب اختيار تقيم ',
+            'rate.numeric'              => 'يجب ان يكون رقم صحيح ',
+            'rate.max'                  => 'الرقم المدخل يجب ان يكون من 1 الى 5  ',
+        ];
+
+
+        $validatorData = validator()->make($request->all(), $rules, $messages);
+
+        if($validatorData->fails())
+        {
+            $errors = $validatorData->errors();
+            return responseJson(0, $validatorData->errors()->first(), $errors);
+        }
+ 
+        
+        //  client 
+        $client = Client::find($request->user()->id);
+
+        //dd($restaurant);
+
+        $request->merge(['client_id' => $request->user()->id]);
+
+        $review = $client->reviews()->create($request->all());
+
+        return responseJson(1, 'تم التقييم بنجاح', [
+
+            'review' => $review->load('client','restaurant')
+        ]);
+
+    }
+
+    // contact 
+
+    public function contact(Request $request){
+
+        // validator Data
+        $rules = [
+            'name'          => 'required',
+            'email'         => 'required|email',
+            'phone'         => 'required|numeric',
+            'massage'       => 'required', 
+            'type'          => 'required|in:complaint,suggestion,Enquiry'
+        ];
+
+        $messages = [
+
+            'name.required'             => 'يجب ادخال الاسم   ',
+            'email.required'            => 'يجب ادخال البريد الإلكتروني ',
+            'phone.required'            => 'يجب إدخال رقم الهاتف  ',
+            'phone.numeric'             => 'يجب إدخال قيمة رقمية ',
+            'massage.required'          => 'يجب ادخال رساله نصيه  ',
+            'type.required'             => 'يجب اختيار النوع ',
+            'type.in'                   => 'اختيار خاطئ ',
+
+
+        ];
+
+        $validatorData = validator()->make($request->all(), $rules, $messages);
+
+        if($validatorData->fails())
+        {
+            $errors = $validatorData->errors();
+            return responseJson(0, $validatorData->errors()->first(), $errors);
+        }
+
+       
+        $contact  = Contacte::create($request->all());
+        return responseJson(1, 'تم ارسال الرساله بنجاح', $contact);
+
+    }
+
 }

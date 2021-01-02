@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\Api\Restaurant;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Offer;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
-    
-    // Create Products
+    // prodects
+
+
+    // Add Products
     public function products(Request $request){
 
         // validator Data
@@ -66,7 +70,7 @@ class MainController extends Controller
     }
 
 
-    // Create Products
+    // Add offers  // delete and edit
     public function offers(Request $request){
 
         // validator Data
@@ -123,6 +127,148 @@ class MainController extends Controller
         return responseJson(1, 'تم اضافة العرض بنجاح', [
             'restaurant'    => $offer
         ]);
+    }
+
+  
+
+
+
+    public function notifications(Request $request)
+    {
+        //dd($request->user());
+        $notifications = $request->user()->notifications()->with('order')->latest()->paginate(20);
+
+        return count($notifications) ? responseJson(1 , 'success' , $notifications->load('order'))
+                                     : responseJson(0 , 'لا يوجد إشعارات  ');
+    }
+
+    //orders acceptOrder & rejectOrder
+
+    public function acceptOrder(Request $request)
+    {
+
+        $client = $request->user();
+
+        $rules = [
+            'order_id'  => 'required|exists:orders,id'
+        ];
+
+        $messages = [
+            'order_id.required' => 'يجب إدخال الطلب' , 
+            'order_id.exists'   => 'الطلب غير موجود'
+        ];
+
+
+        $validatorData = validator()->make($request->all(), $rules, $messages);
+
+        if($validatorData->fails())
+        {
+            $errors = $validatorData->errors();
+            return responseJson(0, $validatorData->errors()->first(), $errors);
+        }
+
+        // check if order with user
+        $order = Order::where([
+                    ['id' , $request->order_id] , 
+                    ['restaurant_id' , $request->user()->id]
+                ])->first();
+
+        if(!$order)
+        {
+            return responseJson(0 , 'هذا الطلب لا يتبع للمطعم');
+        }
+
+        // check if order pending or  accepted   
+        if(!($order->status === 'pending'))
+        {
+            return responseJson(0 , 'لايمكن قبول هذا الطلب الان ' );
+        }
+
+        // Accepted the order
+        $order->status = 'accepted';
+        $order->save();
+
+        // Make a notification 
+        $order->restaurant->notifications()->create([
+                            'title' => 'تم قبول الطلب من قبل  المطعم' , 
+                            'content'  => '  تم قبول الطلب من قبل المطعم   ' . $client->name,
+                            'order_id' => $order->id
+                        ]);
+
+        // Send Notification
+        $tokens = $order->restaurant->tokens()->where('token' , '!=' , '')->pluck('token')->toArray();
+        $data = [
+            'user_type' => 'client' , 
+            'action'    => 'accetp_order' , 
+            'order'     =>  $order
+        ];
+        // $send = notifyByFirebase($notification->title , $notification->body , $tokens , $data );
+        return responseJson(1 , 'تم قبول الطلب' , $data);
+
+    }
+
+    // rejectOrder
+    public function rejectOrder(Request $request)
+    {
+
+        $client = $request->user();
+
+        $rules = [
+            'order_id'  => 'required|exists:orders,id'
+        ];
+
+        $messages = [
+            'order_id.required' => 'يجب إدخال الطلب' , 
+            'order_id.exists'   => 'الطلب غير موجود'
+        ];
+
+
+        $validatorData = validator()->make($request->all(), $rules, $messages);
+
+        if($validatorData->fails())
+        {
+            $errors = $validatorData->errors();
+            return responseJson(0, $validatorData->errors()->first(), $errors);
+        }
+
+        // check if order with user
+        $order = Order::where([
+                    ['id' , $request->order_id] , 
+                    ['restaurant_id' , $request->user()->id]
+                ])->first();
+
+        if(!$order)
+        {
+            return responseJson(0 , 'هذا الطلب لا يتبع للمطعم');
+        }
+
+        // check if order pending or  accepted   
+        if(!($order->status === 'pending'))
+        {
+            return responseJson(0 , 'لايمكن قبول هذا الطلب الان ' );
+        }
+
+        // Rejected the order
+        $order->status = 'rejected';
+        $order->save();
+
+        // Make a notification 
+        $order->restaurant->notifications()->create([
+                            'title' => 'تم رفض الطلب من قبل  المطعم' , 
+                            'content'  => '  تم رفض الطلب من قبل المطعم   ' . $client->name,
+                            'order_id' => $order->id
+                        ]);
+
+        // Send Notification
+        $tokens = $order->restaurant->tokens()->where('token' , '!=' , '')->pluck('token')->toArray();
+        $data = [
+            'user_type' => 'client' , 
+            'action'    => 'reject_order' , 
+            'order'     =>  $order
+        ];
+        // $send = notifyByFirebase($notification->title , $notification->body , $tokens , $data );
+        return responseJson(1 , 'تم رفض الطلب' , $data);
+
     }
 
 

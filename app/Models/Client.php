@@ -23,9 +23,9 @@ class Client extends Authenticatable
 
     public function reviews()
     {
-        return $this->belongsToMany('App\Models\Restaurant', 'restaurant_id');
+        return $this->hasMany('App\Models\Review');
     }
-
+    
     public function orders()
     {
         return $this->hasMany('App\Models\Product');

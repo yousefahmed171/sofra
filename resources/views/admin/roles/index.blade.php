@@ -11,7 +11,7 @@
           <div class="card">
             <div class="card-header">
               <h3 class="card-title">Roles Table </h3> <br>
-              <a href="{{route('role.create')}}" class="btn btn-info"> <i class=" fas fa-plus"></i> Create Roles</a>
+              <a href="{{route('roles.create')}}" class="btn btn-info"> <i class=" fas fa-plus"></i> Create Roles</a>
              
             </div>
             @include('flash::message')
@@ -50,10 +50,10 @@
                       
                     </td>
                     <td>
-                        <a href="{{route('role.edit', $role->id)}}" class="btn btn-success btn-xs"><i class="fa fa-edit"></i> Edit</a>
+                        <a href="{{route('roles.edit', $role->id)}}" class="btn btn-success btn-xs"><i class="fa fa-edit"></i> Edit</a>
                     </td>
                     <td>
-                        {!! Form::model($role, ['action' => ['RoleController@destroy',$role->id], 'method' => 'DELETE']) !!} 
+                        {!! Form::model($role, ['action' => ['Admin\RoleController@destroy',$role->id], 'method' => 'DELETE']) !!} 
 
                         <button type="submit" class="btn btn-danger btn-xs"><i class="fas fa-trash-alt"></i> Delete</button>
                         {!! Form::close() !!}

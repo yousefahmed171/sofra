@@ -12,7 +12,7 @@
   @include('flash::message')
   <div class="card-body">
 
-    {!! Form::model($user, ['action' => ['ResetPaswwordController@update',$user->id], 'method' => 'PUT']) !!} 
+    {!! Form::model($admin, ['action' => ['Admin\ResetPaswwordController@update',$admin->id], 'method' => 'PUT']) !!} 
     
     @include('admin.partials.validate_errors')
 

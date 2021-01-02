@@ -11,7 +11,7 @@
   </div>
   <div class="card-body">
 
-    {!! Form::model($model, ['action' => ['CategoryController@update',$model->id], 'method' => 'PUT']) !!} 
+    {!! Form::model($record, ['action' => ['Admin\CategoryController@update',$record->id], 'method' => 'PUT']) !!} 
     
     @include('admin.partials.validate_errors')
 

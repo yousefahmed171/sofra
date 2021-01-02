@@ -1,6 +1,5 @@
-
 @extends('admin.index')
-@section('title') Governorate @endsection
+@section('title') Print Order  @endsection
     
 @section('content')
 
@@ -10,50 +9,43 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Governorate Table </h3> <br>
-              <a href="{{route('governorate.create')}}" class="btn btn-info"> <i class=" fas fa-plus"></i> Create Governorate</a>
+              <h3 class="card-title">orders  Table </h3> <br>
              
             </div>
             @include('flash::message')
             <!-- /.card-header -->
-            @if(count($records))
-                
+            @if($record)
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>Id </th>
-                  <th>Name Governorate</th>
-                  <th>Edit</th>
-                  <th>Delete</th>
+                  <th>ID </th>
+                  <th>name</th>
+                  <th>quantity</th>
+                  <th>quantity </th>
+                  <th>note </th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($records as $record)
+                @foreach ($record->products as $product)
                 <tr>
                     <td>{{$loop->iteration}}</td>
-                    <td>{{$record->name}}</td>
-                    <td>
-                        <a href="{{route('governorate.edit', $record->id)}}" class="btn btn-success btn-xs"><i class="fa fa-edit"></i> Edit</a>
-                    </td>
-                    <td>
-                        {!! Form::model($record, ['action' => ['GovernorateController@destroy',$record->id], 'method' => 'DELETE']) !!} 
-
-                        <button type="submit" class="btn btn-danger btn-xs"><i class="fas fa-trash-alt"></i> Delete</button>
-                        {!! Form::close() !!}
-                    </td>
-                  </tr>
+                    <td>{{$product->name}}</td>
+                    <td>{{$product->pivot->quantity}}</td>
+                    <td>{{$product->pivot->quantity}}</td>
+                    <td>{{$product->pivot->note}}</td> 
+                </tr>
                 @endforeach
-                
 
                 </tbody>
                 <tfoot>
-                <tr>
-                  <th>Rendering engine</th>
-                  <th>Browser</th>
-                  <th>Platform(s)</th>
-                  <th>Engine version</th>
-                </tr>
+                  <tr>
+                    <th>ID </th>
+                    <th>name</th>
+                    <th>quantity</th>
+                    <th>quantity </th>
+                    <th>note </th>
+                  </tr>
                 </tfoot>
               </table>
             </div>
@@ -76,5 +68,4 @@
     <!-- /.container-fluid -->
   </section>
   <!-- /.content -->
-
 @endsection

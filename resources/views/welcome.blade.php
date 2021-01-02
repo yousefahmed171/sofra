@@ -92,7 +92,7 @@
                     <a href="https://nova.laravel.com">Nova</a>
                     <a href="https://forge.laravel.com">Forge</a>
                     <a href="https://vapor.laravel.com">Vapor</a>
-                    <a href="{{route('admin.index')}}">admin</a>
+                    <a href="{{url('admin/login')}}">admin</a>
                 </div>
             </div>
         </div>

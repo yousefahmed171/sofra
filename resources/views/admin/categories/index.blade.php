@@ -11,12 +11,12 @@
           <div class="card">
             <div class="card-header">
               <h3 class="card-title">Categories Table </h3> <br>
-              <a href="{{route('category.create')}}" class="btn btn-info"> <i class=" fas fa-plus"></i> Create Categories</a>
+              <a href="{{route('categories.create')}}" class="btn btn-info"> <i class=" fas fa-plus"></i> Create Categories</a>
              
             </div>
             @include('flash::message')
             <!-- /.card-header -->
-            @if(count($records))
+            @if(count($record))
                 
             <div class="card-body">
               <table id="example" class="table table-bordered table-striped">
@@ -29,19 +29,20 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($records as $record)
+                @foreach ($record as $category)
                 <tr>
                     <td>{{$loop->iteration}}</td>
-                    <td>{{$record->name}}</td>
+                    <td>{{$category->name}}</td>
                     <td>
-                        <a href="{{route('category.edit', $record->id)}}" class="btn btn-success btn-xs"><i class="fa fa-edit"></i> Edit</a>
+                        <a href="{{route('categories.edit', $category->id)}}" class="btn btn-success btn-xs"><i class="fa fa-edit"></i> Edit</a>
                     </td>
-                    <td>
-                        {!! Form::model($record, ['action' => ['CategoryController@destroy',$record->id], 'method' => 'DELETE']) !!} 
 
-                        <button type="submit" class="btn btn-danger btn-xs"><i class="fas fa-trash-alt"></i> Delete</button>
-                        {!! Form::close() !!}
-                    </td>
+                    <td>
+                      {!! Form::model($category, ['action' => ['Admin\CategoryController@destroy',$category->id], 'method' => 'DELETE']) !!} 
+
+                      <button type="submit" class="btn btn-danger btn-xs"><i class="fas fa-trash-alt"></i> Delete</button>
+                      {!! Form::close() !!}
+                  </td>
                   </tr>
                 @endforeach
                 

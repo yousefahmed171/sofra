@@ -11,22 +11,14 @@
   </div>
   <div class="card-body">
 
-    {!! Form::model($model, ['action' => ['CityController@update',$model->id], 'method' => 'PUT']) !!} 
+    {!! Form::model($record, ['action' => ['Admin\CityController@update',$record->id], 'method' => 'PUT']) !!} 
     
     @include('admin.partials.validate_errors')
-    <div class="form-group">
-      <label for="exampleInputCity">Edit City</label>
-      {!! Form::text('name', null,[
-        'class'       => 'form-control'
-      ])!!}
-    </div>
 
-  <div class="form-group">
-    <label >Select Governorate City</label>
-    {!! Form::select('governorate_id', $categoriesArray, null,[
-      'class'       => 'form-control',
+    <label for="exampleInputGovernorate">Edit Governorate</label>
+    {!! Form::text('name', null,[
+      'class'       => 'form-control'
     ])!!}
-  </div>
   </div>
 
   <div class="card-footer">

@@ -1,6 +1,6 @@
 
 @extends('admin.index')
-@section('title') Admin @endsection
+@section('title') Cities @endsection
     
 @section('content')
 
@@ -10,42 +10,36 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Admin Table </h3> <br>
-              <a href="{{route('user.create')}}" class="btn btn-info"> <i class=" fas fa-plus"></i> Create Admin</a>
+              <h3 class="card-title">Region Table </h3> <br>
+              <a href="{{route('regions.create')}}" class="btn btn-info"> <i class=" fas fa-plus"></i> Create Region</a>
              
             </div>
             @include('flash::message')
             <!-- /.card-header -->
-            @if(count($users))
+            @if(count($record))
                 
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                   <th>Id </th>
-                  <th>Name</th>
-                  <th>Role</th>
-                  <th>Email</th>
+                  <th>Name Region</th>
+                  <th>Name City</th>
                   <th>Edit</th>
                   <th>Delete</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($users as $user)
+                @foreach ($record as $region)
                 <tr>
                     <td>{{$loop->iteration}}</td>
-                    <td>{{$user->name}}</td>
+                    <td>{{$region->name}}</td>
+                    <td>{{$region->city->name}}</td>
                     <td>
-                      @foreach ($user->roles as $role)
-                          <span class="badge badge-success">{{$role->display_name}} </span>
-                      @endforeach
-                    </td>
-                    <td>{{$user->email}}</td>
-                    <td>
-                        <a href="{{route('user.edit', $user->id)}}" class="btn btn-success btn-xs"><i class="fa fa-edit"></i> Edit</a>
+                        <a href="{{route('regions.edit', $region->id)}}" class="btn btn-success btn-xs"><i class="fa fa-edit"></i> Edit</a>
                     </td>
                     <td>
-                        {!! Form::model($user, ['action' => ['UserController@destroy',$user->id], 'method' => 'DELETE']) !!} 
+                        {!! Form::model($region, ['action' => ['Admin\RegionController@destroy',$region->id], 'method' => 'DELETE']) !!} 
 
                         <button type="submit" class="btn btn-danger btn-xs"><i class="fas fa-trash-alt"></i> Delete</button>
                         {!! Form::close() !!}
@@ -58,9 +52,8 @@
                 <tfoot>
                 <tr>
                   <th>Id </th>
-                  <th>Name</th>
-                  <th>Role</th>
-                  <th>Email</th>
+                  <th>Name Region</th>
+                  <th>Name City</th>
                   <th>Edit</th>
                   <th>Delete</th>
                 </tr>

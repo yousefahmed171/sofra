@@ -1,6 +1,6 @@
 
 @extends('admin.index')
-@section('title') Cities @endsection
+@section('title') City @endsection
     
 @section('content')
 
@@ -11,12 +11,12 @@
           <div class="card">
             <div class="card-header">
               <h3 class="card-title">City Table </h3> <br>
-              <a href="{{route('city.create')}}" class="btn btn-info"> <i class=" fas fa-plus"></i> Create City</a>
+              <a href="{{route('cities.create')}}" class="btn btn-info"> <i class=" fas fa-plus"></i> Create City</a>
              
             </div>
             @include('flash::message')
             <!-- /.card-header -->
-            @if(count($records))
+            @if(count($record))
                 
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
@@ -24,22 +24,20 @@
                 <tr>
                   <th>Id </th>
                   <th>Name City</th>
-                  <th>Name Governorate</th>
                   <th>Edit</th>
                   <th>Delete</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($records as $record)
+                @foreach ($record as $city)
                 <tr>
                     <td>{{$loop->iteration}}</td>
-                    <td>{{$record->name}}</td>
-                    <td>{{$record->governorate->name}}</td>
+                    <td>{{$city->name}}</td>
                     <td>
-                        <a href="{{route('city.edit', $record->id)}}" class="btn btn-success btn-xs"><i class="fa fa-edit"></i> Edit</a>
+                        <a href="{{route('cities.edit', $city->id)}}" class="btn btn-success btn-xs"><i class="fa fa-edit"></i> Edit</a>
                     </td>
                     <td>
-                        {!! Form::model($record, ['action' => ['CityController@destroy',$record->id], 'method' => 'DELETE']) !!} 
+                        {!! Form::model($city, ['action' => ['Admin\CityController@destroy',$city->id], 'method' => 'DELETE']) !!} 
 
                         <button type="submit" class="btn btn-danger btn-xs"><i class="fas fa-trash-alt"></i> Delete</button>
                         {!! Form::close() !!}
@@ -50,13 +48,12 @@
 
                 </tbody>
                 <tfoot>
-                <tr>
-                  <th>Id </th>
-                  <th>Name City</th>
-                  <th>Name Governorate</th>
-                  <th>Edit</th>
-                  <th>Delete</th>
-                </tr>
+                  <tr>
+                    <th>Id </th>
+                    <th>Name City</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                  </tr>
                 </tfoot>
               </table>
             </div>

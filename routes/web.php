@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('admin.index');
+    return view('welcome');
     //return redirect()->to('admin');
 });
 
@@ -23,29 +24,46 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['middleware'=>'auth' , 'prefix' => 'admin'],function(){
-    Route::get('/','HomeController@index');
-    Route::resource('city', 'CityController');
-    Route::resource('region', 'RegionController');
-    Route::resource('category', 'CategoryController');
-    Route::resource('offer', 'OfferController');
-    Route::get('restaurant/{id}/activate', 'RestaurantController@activate');
-    Route::get('restaurant/{id}/de-activate', 'RestaurantController@deActivate');
-    Route::resource('restaurant','RestaurantController');
-    Route::resource('{restaurant}/item', 'ItemController');
-    Route::resource('order','OrderController');
-    Route::resource('transaction','TransactionController');
-    Route::resource('payment-method','PaymentMethodController');
-    Route::resource('delivery-method','DeliveryMethodController');
-    Route::resource('contact','ContactController');
-    Route::resource('client','ClientController');
+// Admin
+Route::group(['prefix' => 'admin', 'namespace'=> 'Admin'],function(){
 
-    Route::get('settings','SettingsController@view');
-    Route::post('settings','SettingsController@update');
-    
-    // user reset
-    Route::get('user/change-password','UserController@changePassword');
-    Route::post('user/change-password','UserController@changePasswordSave');
-//    Route::resource('user','UserController');
-//    Route::resource('role','RoleController');
+    Config::set('auth.defines', 'admin'); //set guards
+    Route::get('login', 'AdminAuthController@login');
+    Route::post('login', 'AdminAuthController@doLogin');
+    Route::get('register', 'AdminAuthController@register');
+    Route::post('register', 'AdminAuthController@doRegister');
+
+    Route::get('forget/password', 'AdminAuthController@forget_password');
+    Route::post('forget/password', 'AdminAuthController@forget_password_post');
+    Route::get('reset/password/{token}', 'AdminAuthController@reset_password');
+    Route::post('reset/password/{token}', 'AdminAuthController@reset_password_final');
+
+    Route::group(['middleware' => 'admin:admin'], function(){
+
+        // AdminAuthController
+        Route::any('logout', 'AdminAuthController@logout');
+
+
+        // AdminMainController
+        Route::get('home', 'AdminMainController@index');
+        Route::resource('categories', 'CategoryController');
+        Route::resource('cities', 'CityController');
+        Route::resource('regions', 'RegionController'); 
+        Route::resource('contacts', 'ContactController');
+        Route::resource('settings', 'SettingController');
+        Route::resource('clients','ClientController');
+        Route::put('de-active/{id}', 'ClientController@deActive');
+        Route::put('active/{id}', 'ClientController@active');
+        Route::resource('restaurants','RestaurantController');
+        Route::put('de-active/{id}', 'RestaurantController@deActive');
+        Route::put('active/{id}', 'RestaurantController@active');
+        Route::resource('offers','OfferController');
+        Route::resource('orders','OrderController');
+        Route::resource('admins', 'AdminController');
+        Route::resource('roles', 'RoleController');
+        Route::resource('reset-password', 'ResetPaswwordController');
+
+    });
+
+
 });

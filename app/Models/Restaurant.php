@@ -27,7 +27,7 @@ class Restaurant extends Authenticatable
 
     public function reviews()
     {
-        return $this->belongsToMany('App\Models\Client', 'client_id');
+        return $this->hasMany('App\Models\Review');
     }
 
     public function offers()

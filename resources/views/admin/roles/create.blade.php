@@ -16,7 +16,7 @@
   
 
   {!! Form::model($model,[
-    'action' => 'RoleController@store',
+    'action' => 'Admin\RoleController@store',
     'method' => 'POST'
   ]) !!} 
   

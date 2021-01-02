@@ -48,6 +48,7 @@
   });
 </script>
 @stack('scripts')
+@stack('script')
 
 </body>
 </html>

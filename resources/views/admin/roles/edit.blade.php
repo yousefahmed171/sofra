@@ -12,7 +12,7 @@
   </div>
   <div class="card-body">
 
-    {!! Form::model($model, ['action' => ['RoleController@update',$model->id], 'method' => 'PUT']) !!} 
+    {!! Form::model($model, ['action' => ['Admin\RoleController@update',$model->id], 'method' => 'PUT']) !!} 
     
     @include('admin.partials.validate_errors')
 

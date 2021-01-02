@@ -14,7 +14,7 @@
             </div>
             @include('flash::message')
             <!-- /.card-header -->
-            @if(count($records))
+            @if(count($record))
                 
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
@@ -24,44 +24,34 @@
                   <th>Name </th>
                   <th>Email</th>
                   <th>Phone</th>
-                  <th>Brith Date</th>
-                  <th>Last Donation Date </th>
-                  <th>Blood Type</th>
                   <th>City </th>
-                  <th>Active de-Active </th>
+                  {{-- <th>Active de-Active </th> --}}
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($records as $record)
+                @foreach ($record as $client)
                 <tr>
                     <td>{{$loop->iteration}}</td>
-                    <td>{{$record->name}}</td>
-                    <td>{{$record->email}}</td>
-                    <td>{{$record->phone}}</td>
-                    <td>{{$record->brith_date}}</td>
-                    <td>{{$record->last_donation_date}}</td>
-                    <td>
-                      @foreach ($record->bloodTypes as $blood)
-                      <span class="badge badge-success">{{$blood->name}} </span>
-                      @endforeach
-                    </td>
-                    <td>{{$record->city->name}}</td>
-                    @if ($record->active == 0)
-                       <td> 
-                          {!! Form::model($record, ['action' => ['ClientController@active',$record->id], 'method' => 'PUT']) !!} 
+                    <td>{{$client->name}}</td>
+                    <td>{{$client->email}}</td>
+                    <td>{{$client->phone}}</td>
+                    <td>{{$client->region->name}}</td>
+                    {{-- @if ($client->active == 0)
+                       <td>
+                          {!! Form::model($client, ['action' => ['Admin\ClientController@active',$client->id], 'method' => 'PUT']) !!} 
 
                           <button type="submit" class="btn btn-danger btn-xs"><i class="fas fa-times"></i>  De Active </button>
                           {!! Form::close() !!}
                        </td>
                     @else
                         <td>
-                          {!! Form::model($record, ['action' => ['ClientController@deActive',$record->id], 'method' => 'PUT']) !!} 
+                          {!! Form::model($client, ['action' => ['Admin\ClientController@deActive',$client->id], 'method' => 'PUT']) !!} 
 
                           <button type="submit" class="btn btn-success btn-xs"><i class="fas fa-check"></i>    Active </button>
                           {!! Form::close() !!}
                         </td>
                     @endif
-                    
+                     --}}
                   </tr>
                 @endforeach
 
@@ -72,11 +62,8 @@
                     <th>Name </th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Brith Date</th>
-                    <th>Last Donation Date </th>
-                    <th>Blood Type</th>
                     <th>City </th>
-                    <th>Active de-Active </th>
+                    {{-- <th>Active de-Active </th> --}}
                 </tr>
                 </tfoot>
               </table>

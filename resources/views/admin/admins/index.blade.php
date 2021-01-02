@@ -1,6 +1,5 @@
-
 @extends('admin.index')
-@section('title') Posts @endsection
+@section('title') Admin @endsection
     
 @section('content')
 
@@ -10,43 +9,42 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Posts Table </h3> <br>
-              <a href="{{route('post.create')}}" class="btn btn-info"> <i class=" fas fa-plus"></i> Create Posts</a>
+              <h3 class="card-title">Admin Table </h3> <br>
+              <a href="{{route('admins.create')}}" class="btn btn-info"> <i class=" fas fa-plus"></i> Create Admin</a>
              
             </div>
             @include('flash::message')
             <!-- /.card-header -->
-            @if(count($posts))
+            @if(count($record))
                 
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                   <th>Id </th>
-                  <th>Title </th>
-                  <th>Img </th>
-                  <th>Content </th>
-                  <th>Category </th>
+                  <th>Name</th>
+                  <th>Role</th>
+                  <th>Email</th>
                   <th>Edit</th>
                   <th>Delete</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($posts as $post)
+                @foreach ($record as $admin)
                 <tr>
                     <td>{{$loop->iteration}}</td>
-                    <td>{{$post->title}}</td>
+                    <td>{{$admin->name}}</td>
                     <td>
-                      <img src="{{asset('images/posts/'.$post->img)}}" alt="{{$post->title}}" 
-                      class="img-fluid rounded" style="margin-right: -3%; width: 80px; height: 80px;">
+                      @foreach ($admin->roles as $role)
+                          <span class="badge badge-success">{{$role->display_name}} </span>
+                      @endforeach
                     </td>
-                    <td>{{$post->content}}</td>
-                    <td>{{$post->category->name}}</td>
+                    <td>{{$admin->email}}</td>
                     <td>
-                        <a href="{{route('post.edit', $post->id)}}" class="btn btn-success btn-xs"><i class="fa fa-edit"></i> Edit</a>
+                        <a href="{{route('admins.edit', $admin->id)}}" class="btn btn-success btn-xs"><i class="fa fa-edit"></i> Edit</a>
                     </td>
                     <td>
-                        {!! Form::model($post, ['action' => ['PostController@destroy',$post->id], 'method' => 'DELETE']) !!} 
+                        {!! Form::model($admin, ['action' => ['Admin\AdminController@destroy',$admin->id], 'method' => 'DELETE']) !!} 
 
                         <button type="submit" class="btn btn-danger btn-xs"><i class="fas fa-trash-alt"></i> Delete</button>
                         {!! Form::close() !!}
@@ -59,10 +57,9 @@
                 <tfoot>
                 <tr>
                   <th>Id </th>
-                  <th>Title </th>
-                  <th>Img </th>
-                  <th>Content </th>
-                  <th>Category </th>
+                  <th>Name</th>
+                  <th>Role</th>
+                  <th>Email</th>
                   <th>Edit</th>
                   <th>Delete</th>
                 </tr>

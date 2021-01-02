@@ -8,22 +8,9 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{route('home')}}" class="nav-link">Home</a>
+        <a href="{{url('admin/home')}}" class="nav-link">Home</a>
       </li>
-
     </ul>
-
-    {{-- <!-- SEARCH FORM -->
-    <form class="form-inline ml-3">
-      <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-        <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
-    </form> --}}
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
@@ -55,12 +42,12 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{route('home')}}" class="brand-link">
-      <img src="{{asset('admin/img/blood-bank.png')}}"
-           alt="Blood Bank Logo"
+    <a href="{{url('admin/home')}}" class="brand-link">
+      <img src="{{asset('admin/img/sofra.jpg')}}"
+           alt="Sofra Logo"
            class="brand-image img-circle elevation-3"
            style="opacity: .8">
-      <span class="brand-text font-weight-light">Blood Bank</span>
+      <span class="brand-text font-weight-light">Sofra Admin </span>
     </a>
 
     <!-- Sidebar -->
@@ -71,7 +58,7 @@
           <img src="{{asset('admin/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">  </a>
+          <a href="#" class="d-block">  {{auth()->guard('admin')->user()->name}} </a>
         </div>
       </div>
 
@@ -91,7 +78,7 @@
           </li>
 
           <li class="nav-item has-treeview">
-            <a href="{{route('category.index')}}" class="nav-link">
+            <a href="{{route('categories.index')}}" class="nav-link">
               <i class="nav-icon fas fa-project-diagram"></i>
               <p>
                 Category
@@ -103,21 +90,21 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-flag"></i>
               <p>
-                Governorates
+                Cities
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{route('region.index')}}" class="nav-link">
+                <a href="{{route('cities.index')}}" class="nav-link">
                   <i class="nav-icon fas fa-city"></i>
-                  <p>Show Governorates</p>
+                  <p>Show Cities</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{route('region.create')}}" class="nav-link">
+                <a href="{{route('cities.create')}}" class="nav-link">
                   <i class="nav-icon fas fa-file-signature"></i>
-                  <p>Create Governorates </p>
+                  <p>Create Cities </p>
                 </a>
               </li>
             </ul>
@@ -127,28 +114,28 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-city"></i>
               <p>
-                Cities
+                Regions
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{route('city.index')}}" class="nav-link">
+                <a href="{{route('regions.index')}}" class="nav-link">
                   <i class="nav-icon fas fa-city"></i>
-                  <p>Show Cities</p>
+                  <p>Show Regions</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{route('city.create')}}" class="nav-link">
+                <a href="{{route('regions.create')}}" class="nav-link">
                   <i class="nav-icon fas fa-file-signature"></i>
-                  <p>Create Cities </p>
+                  <p>Create Regions </p>
                 </a>
               </li>
             </ul>
           </li>
 
           <li class="nav-item has-treeview">
-            <a href="{{route('client.index')}}" class="nav-link">
+            <a href="{{route('clients.index')}}" class="nav-link">
               <i class="nav-icon fas fa-users"></i>
               <p>
                 Clients
@@ -156,9 +143,44 @@
             </a>
           </li>
 
+          <li class="nav-item has-treeview">
+            <a href="{{route('restaurants.index')}}" class="nav-link">
+              <i class="nav-icon fas fa-pizza-slice"></i>
+              <p>
+                Restaurants
+              </p>
+            </a>
+          </li>
 
           <li class="nav-item has-treeview">
-            <a href="{{route('contact.index')}}" class="nav-link">
+            <a href="{{route('offers.index')}}" class="nav-link">
+              <i class="nav-icon fas fa-gift"></i>
+              <p>
+                Offers
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item has-treeview">
+            <a href="{{route('orders.index')}}" class="nav-link">
+              <i class="nav-icon fas fa-cart-arrow-down"></i>
+              <p>
+                Orders
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item has-treeview">
+            <a href="{{route('contacts.index')}}" class="nav-link">
+              <i class="nav-icon fas fa-money-check-alt"></i>
+              <p>
+                Payment Method
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item has-treeview">
+            <a href="{{route('contacts.index')}}" class="nav-link">
               <i class="nav-icon fas fa-phone-alt"></i>
               <p>
                 Contacts
@@ -167,7 +189,8 @@
           </li>
 
           <li class="nav-item has-treeview">
-            <a href=" " class="nav-link">
+            <a href="{{route('reset-password.edit', auth()->guard('admin')->user()->id)}}
+              " class="nav-link">
               <i class="nav-icon fa fa-key"></i>
               <p>
                 Reset Password
@@ -176,7 +199,7 @@
           </li>
 
           <li class="nav-item has-treeview">
-            <a href=" " class="nav-link">
+            <a href="{{route('admins.index')}}" class="nav-link">
               
               <i class="nav-icon fas fa-user-cog"></i>
               <p>
@@ -186,7 +209,7 @@
           </li>
 
           <li class="nav-item has-treeview">
-            <a href=" " class="nav-link">
+            <a href="{{route('roles.index')}}" class="nav-link">
               
               <i class="nav-icon fas fa-users-cog"></i>
               <p>
@@ -197,7 +220,7 @@
 
           <li class="nav-item has-treeview">
             @foreach ($setting->all() as $item)
-            <a href="{{route('setting.edit', $item->id)}}" class="nav-link">
+            <a href="{{route('settings.edit', $item->id)}}" class="nav-link">
               <i class="nav-icon fas fa-cogs"></i>
             @endforeach
               <p>

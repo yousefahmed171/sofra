@@ -72,8 +72,8 @@ return [
     | The key in the array is the name of the relationship inside the roles and permissions.
     |
     */
-    'user_models' => [
-        'users' => \App\Models\Admin::class,
+    'admin_models' => [
+        'admins' => \App\Models\Admin::class,
     ],
 
     /*

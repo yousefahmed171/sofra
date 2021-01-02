@@ -15,7 +15,7 @@
   
 
   {!! Form::model($model,[
-    'action' => 'CategoryController@store'
+    'action' => 'Admin\CategoryController@store'
   ]) !!} 
   
   <div class="card-body">

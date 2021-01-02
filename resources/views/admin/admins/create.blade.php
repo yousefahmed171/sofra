@@ -1,7 +1,7 @@
 
 @extends('admin.index')
 @section('title') Create New Admin @endsection
-@inject('model', 'App\User')
+@inject('model', 'App\Models\Admin')
 @section('content')
 
 
@@ -15,7 +15,7 @@
   
 
   {!! Form::model($model,[
-    'action' => 'UserController@store',
+    'action' => 'Admin\AdminController@store',
     'method' => 'POST'
   ]) !!} 
   
@@ -34,6 +34,13 @@
       'class'       => 'form-control',
       'placeholder' =>  'Email'
     ])!!}
+
+    <label for="phone">Phone </label>
+    {!! Form::number('phone', null,[
+      'class'       => 'form-control',
+      'placeholder' =>  'phone'
+    ])!!}
+
     <div class="form-group">
       <label for="password">Password </label><br>
       {!! Form::password('password', [
@@ -51,8 +58,8 @@
     </div>
 
 
-    <label for="user_type">Role Admin  </label>
-    {!! Form::select('user_type[]', $role, null,[
+    <label for="admin_type">Role Admin  </label>
+    {!! Form::select('admin_type[]', $record, null,[
       'class'       => 'form-control select2',
       'multiple'    =>  'multiple',
 

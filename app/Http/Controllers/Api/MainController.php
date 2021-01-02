@@ -15,7 +15,8 @@ class MainController extends Controller
     public function categories()
     {
         $get = Category::all();
-        return responseJson(1, 'success', $get);
+        return count($get) ? responseJson(1 , 'success' , $get)
+        : responseJson(0 , 'no data');
     }
 
     // Get Cities

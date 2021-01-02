@@ -1,6 +1,5 @@
-
 @extends('admin.index')
-@section('title') Edit User @endsection
+@section('title') Edit Admin @endsection
 
 
 
@@ -8,11 +7,11 @@
 
 <div class="card card-primary">
   <div class="card-header">
-    <h3 class="card-title">Edit User</h3>
+    <h3 class="card-title">Edit Admin</h3>
   </div>
   <div class="card-body">
 
-    {!! Form::model($model, ['action' => ['UserController@update',$model->id], 'method' => 'PUT']) !!} 
+    {!! Form::model($model, ['action' => ['Admin\AdminController@update',$model->id], 'method' => 'PUT']) !!} 
     
     @include('admin.partials.validate_errors')
 
@@ -23,6 +22,12 @@
 
     <label for="email">Email </label>
     {!! Form::text('email', null,[
+      'class'       => 'form-control',
+    ])!!}
+
+
+    <label for="phone">Phone </label>
+    {!! Form::number('phone', null,[
       'class'       => 'form-control',
     ])!!}
 
@@ -39,7 +44,7 @@
     ])!!}
 
     <label for="user_type">Role Admin  </label>
-    {!! Form::select('user_type[]', $role, null,[
+    {!! Form::select('admin_type[]', $record, null,[
       'class'       => 'form-control select2',
       'multiple'    =>  'multiple',
 

@@ -32,7 +32,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api'], function(){
     Route::group(['prefix' => 'client', 'namespace' => 'Client'], function(){
 
         // Main Controller
-
+        Route::post('contact', 'MainController@contact');
+        
         // Auth Controller
         Route::post('register', 'AuthController@register');
         Route::post('login', 'AuthController@login');
@@ -51,7 +52,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api'], function(){
             // Main Controller
             Route::post('new-order', 'MainController@newOrder');
             Route::post('decline-order', 'MainController@declineOrder');
-
+            Route::post('deliver-order', 'MainController@deliverOrder');
+            Route::post('review', 'MainController@review');
+            Route::any('orders', 'MainController@orders');
+            
             
 
         });
@@ -63,7 +67,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api'], function(){
     Route::group(['prefix' => 'restaurant', 'namespace' => 'Restaurant'], function(){
 
         // Main Controller
-
+        Route::get('categories', 'MainController@categories');
 
         // Auth Controller
         Route::post('register', 'AuthController@register');
@@ -85,6 +89,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api'], function(){
             // Main Controller
             Route::post('products', 'MainController@products');
             Route::post('offers', 'MainController@offers');
+            Route::any('notifications', 'MainController@notifications');
+            Route::post('acceptOrder', 'MainController@acceptOrder');
+            Route::post('rejectOrder', 'MainController@rejectOrder');
 
         });
 
