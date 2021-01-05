@@ -32,7 +32,7 @@ class Restaurant extends Authenticatable
 
     public function offers()
     {
-        return $this->hasMany('App\Models\Offer');
+        return $this->hasMany('App\Models\Offer'); 	
     }
 
     public function categories()

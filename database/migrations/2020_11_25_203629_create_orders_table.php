@@ -14,7 +14,7 @@ class CreateOrdersTable extends Migration {
 			$table->text('address')->nullable();
 			$table->text('notes')->nullable();
 			$table->enum('payment_method', array('cash', 'credet'));
-			$table->enum('status', array('pending', 'accepted', 'rejected', 'delivered', 'declined'))->nullable();
+			$table->enum('status', array('pending', 'delivered', 'declined', 'accepted', 'rejected', 'receipt_order'))->nullable()->default('pending');
 			$table->decimal('price', 8,2)->default('0.0');
 			$table->decimal('cost', 8,2)->default('0.0');
 			$table->decimal('net', 8,2)->default('0.0');

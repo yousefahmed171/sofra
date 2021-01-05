@@ -23,38 +23,45 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api'], function(){
 
 
     // Main Controller 
-    Route::get('categories', 'MainController@categories');
-    Route::get('cities', 'MainController@cities');
-    Route::get('regions', 'MainController@regions');
+    Route::get('categories', 'MainController@categories');      // get category
+    Route::get('cities', 'MainController@cities');              // get city
+    Route::get('regions', 'MainController@regions');            // get regions
+    Route::get('setting', 'MainController@setting');            // get setting app 
+    Route::get('offers', 'MainController@offers');              // get all offers
+    Route::get('restaurants', 'MainController@Restaurants');    // show all restaurants
+    Route::any('product', 'MainController@product');            // show list product of restaurant
+    Route::post('contact', 'MainController@contact');           // send contact 
 
 
     // Route Client
     Route::group(['prefix' => 'client', 'namespace' => 'Client'], function(){
 
         // Main Controller
-        Route::post('contact', 'MainController@contact');
+        
         
         // Auth Controller
-        Route::post('register', 'AuthController@register');
-        Route::post('login', 'AuthController@login');
-        Route::post('reset-password', 'AuthController@resetPassword');
-        Route::post('new-password', 'AuthController@newPassword');
-        Route::post('register-token', 'AuthController@registerToken');
-        Route::post('remove-token', 'AuthController@removeToken');
-        Route::get('get-clients', 'AuthController@getClients');
+        Route::post('register', 'AuthController@register');                 // Register
+        Route::post('login', 'AuthController@login');                       // Login
+        Route::post('reset-password', 'AuthController@resetPassword');      // Reset Password
+        Route::post('new-password', 'AuthController@newPassword');          // New Password
+        Route::post('register-token', 'AuthController@registerToken');      // Register Token
+        Route::post('remove-token', 'AuthController@removeToken');          // Remove Token
+
 
         // Should Login in
         Route::group(['middleware' => 'auth:client'], function(){
 
             // Auth Controller
-            Route::post('profile', 'AuthController@profile');
+            Route::post('profile', 'AuthController@profile'); //edit profile
 
             // Main Controller
             Route::post('new-order', 'MainController@newOrder');
             Route::post('decline-order', 'MainController@declineOrder');
             Route::post('deliver-order', 'MainController@deliverOrder');
             Route::post('review', 'MainController@review');
-            Route::any('orders', 'MainController@orders');
+            Route::post('orders', 'MainController@orders');
+            Route::post('old-orders', 'MainController@oldOrders');
+            Route::get('notifications', 'MainController@notifications');
             
             
 

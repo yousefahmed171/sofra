@@ -17,14 +17,6 @@ use Illuminate\Support\Facades\Storage;
 class AuthController extends Controller
 {
 
-    // Get client Register Test
-    public function getclients()
-    {
-        $getclients =  Client::paginate(10);
-        return responseJson(1, 'success', $getclients);
-
-    }
-
     // Register client
     public function register(Request $request){
 
@@ -115,7 +107,7 @@ class AuthController extends Controller
         }
     }
 
-    //Profile
+    // edit Profile
     public function profile(Request $request)
     {
 
@@ -169,9 +161,9 @@ class AuthController extends Controller
 
         return responseJson(1 , 'تم التعديل بنجاح' , $data);
 
-
     }
 
+      
     //Reset Password
     public function resetPassword(Request $request)
     {

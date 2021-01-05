@@ -20,7 +20,8 @@ class CreateClientsTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phone');
-			$table->text('address')->nullable();
+            $table->text('address')->nullable();
+            $table->boolean('activated')->default(1);
 			$table->string('pin_code', 6)->nullable();
 			$table->string('api_token', 60)->nullable();
 			$table->integer('region_id')->unsigned();

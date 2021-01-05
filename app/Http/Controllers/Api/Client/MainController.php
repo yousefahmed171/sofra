@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Client;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Restaurant;
-use App\Models\Contacte;
+use App\Models\Review;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -132,12 +133,19 @@ class MainController extends Controller
             //$request->user()->cart()->detach();  
 
             //create a notification 
-            $notification = $restaurant->notifications()->create([
-                                'title'     => 'لديك طلب جديد ' , 
-                                'content'      => 'لديك طلب جديد من العميل ' . $client->name ,
+            $notification = $client->notifications()->create([
+                                'title'     => 'تم طلب المنتج بنجاح ' , 
+                                'content'      => 'إجمالي التكلفة ' . $net ,
                                 'order_id'  => $order->id
-                        ]);
+            ]);
 
+            $notification = $restaurant->notifications()->create([
+                'title'     => 'لديك طلب جديد ' , 
+                'content'      => 'لديك طلب جديد من العميل ' . $client->name ,
+                'order_id'  => $order->id
+            ]);
+
+            $tokens = $client->tokens()->where('token' , '!=' , '')->pluck('token')->toArray();
             $tokens = $restaurant->tokens()->where('token' , '!=' , '')->pluck('token')->toArray();
             $data   = [
                     'order' => $order->fresh()->load('products') // load => same ->with('products)
@@ -157,14 +165,25 @@ class MainController extends Controller
 
     public function orders(Request $request)
     {
-        dd($request->user()->id);
-        $order =  DB::table('orders')->where('client_id', '=', $request->user()->id)
-                                    //->where('status', '=', 'delivered')
-                                    ->paginate(10);
-        return responseJson(1, 'success', $order);
-
+        $orders = Order::where('client_id', '=',$request->user()->id)
+                        ->where('status', '=', 'pending')
+                        ->orderBy('created_at', 'desc')
+                        ->paginate(10);
+        return responseJson(1, 'success', $orders);
     }
 
+
+    // orders  client
+
+    public function oldOrders(Request $request)
+    {
+
+        $orders = Order::where('client_id', '=',$request->user()->id)
+                        ->where('status', '=', 'delivered')
+                        ->paginate(10);
+        return responseJson(1, 'success', $orders);
+
+    }
 
     // deliver Order
 
@@ -213,17 +232,24 @@ class MainController extends Controller
         $order->save();
 
         // Make a notification 
+        $order->client->notifications()->create([
+            'title' => 'تم توصيل الطلب بنجاح' , 
+            'content'  => '  تم توصيل الطلب بنجاح   ' . $client->name,
+            'order_id' => $order->id
+        ]);
+
         $order->restaurant->notifications()->create([
-                            'title' => 'تم توصيل الطلب بنجاح' , 
-                            'content'  => '  تم توصيل الطلب بنجاح   ' . $client->name,
-                            'order_id' => $order->id
-                        ]);
+            'title' => 'تم توصيل الطلب بنجاح' , 
+            'content'  => '  تم توصيل الطلب بنجاح   ' . $client->name,
+            'order_id' => $order->id
+        ]);
 
         // Send Notification
+        $tokens = $order->client->tokens()->where('token' , '!=' , '')->pluck('token')->toArray();
         $tokens = $order->restaurant->tokens()->where('token' , '!=' , '')->pluck('token')->toArray();
         $data = [
-            'user_type' => 'restaurant' , 
-            'action'    => 'decline_order' , 
+            'user_type' => 'client' , 
+            'action'    => 'delivered_order' , 
             'order'     =>  $order
         ];
        // $send = notifyByFirebase($notification->title , $notification->body , $tokens , $data );
@@ -279,16 +305,23 @@ class MainController extends Controller
         $order->save();
 
         // Make a notification 
+        $order->client->notifications()->create([
+            'title' => 'تم رفض الطلب بنجاح' , 
+            'content'  => '  تم رفض الطلب بنجاح   ' . $client->name,
+            'order_id' => $order->id
+        ]);
+
         $order->restaurant->notifications()->create([
-                            'title' => 'تم رفض الطلب من قبل  العميل' , 
-                            'content'  => '  تم رفض الطلب من قبل العميل   ' . $client->name,
-                            'order_id' => $order->id
-                        ]);
+            'title' => 'تم رفض الطلب من قبل  العميل' , 
+            'content'  => '  تم رفض الطلب من قبل العميل   ' . $client->name,
+            'order_id' => $order->id
+        ]);
 
         // Send Notification
+        $tokens = $order->client->tokens()->where('token' , '!=' , '')->pluck('token')->toArray();
         $tokens = $order->restaurant->tokens()->where('token' , '!=' , '')->pluck('token')->toArray();
         $data = [
-            'user_type' => 'restaurant' , 
+            'user_type' => 'client' , 
             'action'    => 'decline_order' , 
             'order'     =>  $order
         ];
@@ -326,61 +359,43 @@ class MainController extends Controller
             return responseJson(0, $validatorData->errors()->first(), $errors);
         }
  
-        
-        //  client 
-        $client = Client::find($request->user()->id);
+        //get review
+        $rev = Review::where('client_id', $request->user()->id);
 
-        //dd($restaurant);
+            if($rev == true)
+            {
+                return responseJson(1, 'تم التقيم من قبل');
+            } else {
+            //  client 
+            $client = Client::find($request->user()->id);
 
-        $request->merge(['client_id' => $request->user()->id]);
+            //dd($restaurant);
 
-        $review = $client->reviews()->create($request->all());
+            $request->merge(['client_id' => $request->user()->id]);
 
-        return responseJson(1, 'تم التقييم بنجاح', [
+            $review = $client->reviews()->create($request->all());
 
-            'review' => $review->load('client','restaurant')
-        ]);
+            return responseJson(1, 'تم التقييم بنجاح', [
 
-    }
-
-    // contact 
-
-    public function contact(Request $request){
-
-        // validator Data
-        $rules = [
-            'name'          => 'required',
-            'email'         => 'required|email',
-            'phone'         => 'required|numeric',
-            'massage'       => 'required', 
-            'type'          => 'required|in:complaint,suggestion,Enquiry'
-        ];
-
-        $messages = [
-
-            'name.required'             => 'يجب ادخال الاسم   ',
-            'email.required'            => 'يجب ادخال البريد الإلكتروني ',
-            'phone.required'            => 'يجب إدخال رقم الهاتف  ',
-            'phone.numeric'             => 'يجب إدخال قيمة رقمية ',
-            'massage.required'          => 'يجب ادخال رساله نصيه  ',
-            'type.required'             => 'يجب اختيار النوع ',
-            'type.in'                   => 'اختيار خاطئ ',
-
-
-        ];
-
-        $validatorData = validator()->make($request->all(), $rules, $messages);
-
-        if($validatorData->fails())
-        {
-            $errors = $validatorData->errors();
-            return responseJson(0, $validatorData->errors()->first(), $errors);
+                'review' => $review->load('client','restaurant')
+            ]);
         }
 
-       
-        $contact  = Contacte::create($request->all());
-        return responseJson(1, 'تم ارسال الرساله بنجاح', $contact);
+        
+
 
     }
+
+    // get notification
+
+    public function notifications(Request $request)
+    {
+        $notification = $request->user()->notifications()->orderBy('created_at', 'desc')->paginate(10);
+        return responseJson(1, 'الاشعارات ', [
+            'عدد الاشعارات' => count($notification),
+            'اشعارات المستخدم' => $notification
+        ]);
+    }
+
 
 }

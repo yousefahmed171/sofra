@@ -40,5 +40,4 @@ class RolesSeeder extends Seeder
             'description'       => 'صلاحية حذف المستخدمين'
         ]);
     }
-    
 }
