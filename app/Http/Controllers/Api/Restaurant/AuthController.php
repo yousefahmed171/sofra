@@ -18,14 +18,6 @@ use Illuminate\Support\Facades\Storage;
 class AuthController extends Controller
 {
  
-    // Get Restaurant Register Test
-    public function getRestaurants()
-    {
-        $getRestaurants =  Restaurant::paginate(10);
-        return responseJson(1, 'success', $getRestaurants);
-
-    }
-
     // Register Restaurant
     public function register(Request $request){
 
@@ -245,10 +237,10 @@ class AuthController extends Controller
 
         return responseJson(1 , 'تم التعديل بنجاح' , $data);
 
-
     }
 
-    //Reset Password
+
+    // Reset Password
     public function resetPassword(Request $request)
     {
 

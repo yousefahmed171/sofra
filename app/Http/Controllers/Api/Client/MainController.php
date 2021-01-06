@@ -16,6 +16,18 @@ use Illuminate\Support\Facades\DB;
 class MainController extends Controller
 {
 
+
+    // orders  client
+
+    public function orders(Request $request)
+    {
+        $orders = Order::where('client_id', '=',$request->user()->id)
+                        ->where('status', '=', 'pending')
+                        ->orderBy('created_at', 'desc')
+                        ->paginate(10);
+        return responseJson(1, 'success', $orders);
+    }
+
     // Create New Order
     public function newOrder(Request $request){
 
@@ -161,16 +173,7 @@ class MainController extends Controller
         }
     }
 
-    // orders  client
 
-    public function orders(Request $request)
-    {
-        $orders = Order::where('client_id', '=',$request->user()->id)
-                        ->where('status', '=', 'pending')
-                        ->orderBy('created_at', 'desc')
-                        ->paginate(10);
-        return responseJson(1, 'success', $orders);
-    }
 
 
     // orders  client
@@ -381,19 +384,16 @@ class MainController extends Controller
             ]);
         }
 
-        
-
-
     }
 
     // get notification
 
     public function notifications(Request $request)
     {
-        $notification = $request->user()->notifications()->orderBy('created_at', 'desc')->paginate(10);
+        $notifications = $request->user()->notifications()->orderBy('created_at', 'desc')->paginate(10);
         return responseJson(1, 'الاشعارات ', [
-            'عدد الاشعارات' => count($notification),
-            'اشعارات المستخدم' => $notification
+            'عدد الاشعارات' => count($notifications),
+            'اشعارات المستخدم' => $notifications
         ]);
     }
 
