@@ -1,61 +1,76 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# **Sofra**
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+**Sofra** is an application With a double interface, Customer or Restaurant.
+* As a restaurant offer food for sale and add offers.
+* And as a customer you can buy food from any restaurant available.
 
-## About Laravel
+## Sofra API
+**Sofra** uses the [ipda3 API](http://www.ipda3.com/) to sending and receiving data to and from server.
+To use the API, you will need to be trainee at [ipda3-tech](https://www.facebook.com/ipda3tech/), Click on the link to contact with ipda3 facebook page.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
+* Login
+* Register
+* Reset password
+* Change password
+* Profile view and edit
+* **Restaurant** can.
+  * Add, edit and delete food category
+  * Add, edit and delete food meal
+  * Add, edit and delete food offers
+  * Accept and cancel order
+  * Call customer number
+  * Receive notifications
+  * See total payment and app commission
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Libraries Used
+ * [Foundation][0] - Components for core system capabilities, Java extensions and support for
+   multidex and automated testing.
+   * [AppCompat][1] - Degrade gracefully on older versions of Android.
+ * [Architecture][2] - A collection of libraries that help you design robust, testable, and
+   maintainable apps. Start with classes for managing your UI component lifecycle and handling data
+   persistence.
+   * [View Binding][3] - Declaratively bind observable data to UI elements.
+   * [Lifecycles][4] - Create a UI that automatically responds to lifecycle events.
+   * [ViewModel][5] - Store UI-related data that isn't destroyed on app rotations. Easily schedule
+      asynchronous tasks for optimal execution.
+ * [UI][6] - Details on why and how to use UI Components in your apps - together or separate
+   * [Fragment][7] - A basic unit of composable UI.
+   * [Layout][8] - Lay out widgets using different algorithms.
+ * Third party and miscellaneous libraries
+   * [Glide][9] for image loading
+   * [Retrofit ][10] A type-safe HTTP client for Android and Java.
+   * [SDP][11] and [SSP][12] An android lib that provides a new size unit. This size unit scales with the screen size. It can help Android developers with supporting multiple screens.
+   * [SwipeRevealLayout][13] Easy, flexible and powerful Swipe Layout for Android.
+   * [prettytime][14] Social Style Date and Time Formatting for Java.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+ [0]: https://developer.android.com/jetpack/components
+ [1]: https://developer.android.com/topic/libraries/support-library/packages#v7-appcompat
+ [2]: https://developer.android.com/jetpack/arch/
+ [3]: https://developer.android.com/topic/libraries/view-binding
+ [4]: https://developer.android.com/topic/libraries/architecture/lifecycle
+ [5]: https://developer.android.com/topic/libraries/architecture/viewmodel
+ [6]: https://developer.android.com/guide/topics/ui
+ [7]: https://developer.android.com/guide/components/fragments
+ [8]: https://developer.android.com/guide/topics/ui/declaring-layout
+ [9]: https://bumptech.github.io/glide/
+ [10]: https://square.github.io/retrofit/
+ [11]: https://github.com/intuit/sdp
+ [12]: https://github.com/intuit/ssp
+ [13]: https://github.com/chthai64/SwipeRevealLayout
+ [14]: https://github.com/ocpsoft/prettytime
 
-## Learning Laravel
+## Contributing Bug reports
+We use GitHub for bug tracking. Please search the existing issues for your bug and create a new one if the issue is not yet tracked!
+[issues](https://github.com/MohamedOmran72/Sofra/issues)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Upcoming features
+Updates will include **Client cycle** and incorporating additional Jetpack components.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Application work flow
+<img src="appImages/sofra-work-flow.jpg"/>
 
-## Laravel Sponsors
+## License & Copyright
+Copyright (c) 2021 **Yousef Ahmed**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+ [MIT License](LICENSE)
